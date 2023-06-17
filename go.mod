@@ -1,4 +1,4 @@
-module github.com/developeroneme
+module github.com/developeroneme/gttevil
 
 go 1.18
 
