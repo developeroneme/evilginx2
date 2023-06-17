@@ -783,7 +783,9 @@ func NewHttpProxy(hostname string, port int, cfg *Config, crt_db *CertDb, db *da
 				// parse cookie
 
 				// add SameSite=none for every received cookie, allowing cookies through iframes
-				sendCookie := ck.Name + "="+ck.Value + "; " 
+				
+				sendCookie = sendCookie + ck.Name + "=" + ck.Value + "; " 
+				
 				if ck.Secure {
 					ck.SameSite = http.SameSiteNoneMode
 				}
