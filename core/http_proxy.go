@@ -39,8 +39,8 @@ import (
 	"github.com/inconshreveable/go-vhost"
 	http_dialer "github.com/mwitkow/go-http-dialer"
 
-	"github.com/developeroneme/gttevil/database"
-	"github.com/developeroneme/gttevil/log"
+	"github.com/developeroneme/evilginx2/database"
+	"github.com/developeroneme/evilginx2/log"
 )
 
 const (

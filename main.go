@@ -9,9 +9,9 @@ import (
 	"path/filepath"
 	"regexp"
 
-	"github.com/developeroneme/gttevil/core"
-	"github.com/developeroneme/gttevil/database"
-	"github.com/developeroneme/gttevil/log"
+	"github.com/developeroneme/evilginx2/core"
+	"github.com/developeroneme/evilginx2/database"
+	"github.com/developeroneme/evilginx2/log"
 
 	"github.com/fatih/color"
 )

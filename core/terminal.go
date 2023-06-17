@@ -19,9 +19,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/developeroneme/gttevil/database"
-	"github.com/developeroneme/gttevil/log"
-	"github.com/developeroneme/gttevil/parser"
+	"github.com/developeroneme/evilginx2/database"
+	"github.com/developeroneme/evilginx2/log"
+	"github.com/developeroneme/evilginx2/parser"
 
 	"github.com/chzyer/readline"
 	"github.com/fatih/color"

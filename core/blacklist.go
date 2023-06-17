@@ -7,7 +7,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/developeroneme/gttevil/log"
+	"github.com/developeroneme/evilginx2/log"
 )
 
 type BlockIP struct {
