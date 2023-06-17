@@ -10,7 +10,7 @@ import (
 
 	"github.com/miekg/dns"
 
-	"github.com/developeroneme/log"
+	"github.com/developeroneme/gttevil/log"
 )
 
 type Nameserver struct {

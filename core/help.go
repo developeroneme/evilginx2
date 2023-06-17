@@ -6,7 +6,7 @@ import (
 	"github.com/chzyer/readline"
 	"github.com/fatih/color"
 
-	"github.com/developeroneme/log"
+	"github.com/developeroneme/gttevil/log"
 )
 
 type Help struct {

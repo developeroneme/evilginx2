@@ -3,7 +3,7 @@ package core
 import (
 	"time"
 
-	"github.com/developeroneme/database"
+	"github.com/developeroneme/gttevil/database"
 )
 
 type Session struct {

@@ -16,7 +16,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/developeroneme/log"
+	"github.com/developeroneme/gttevil/log"
 
 	"github.com/caddyserver/certmagic"
 )

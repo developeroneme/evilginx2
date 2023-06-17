@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/developeroneme/log"
+	"github.com/developeroneme/gttevil/log"
 )
 
 type HttpServer struct {
