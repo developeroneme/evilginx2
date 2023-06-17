@@ -16,13 +16,13 @@ func putAsciiArt(s string) {
 		d := string(c)
 		switch string(c) {
 		case " ":
-			color.Set(color.BgRed)
+			color.Set(color.BgYellow)
 			d = " "
 		case "@":
 			color.Set(color.BgBlack)
 			d = " "
 		case "#":
-			color.Set(color.BgHiRed)
+			color.Set(color.BgYellow)
 			d = " "
 		case "W":
 			color.Set(color.BgWhite)
