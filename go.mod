@@ -1,4 +1,4 @@
-module github.com/developeroneme/gttevil
+module github.com/developeroneme/evilginx2
 
 go 1.18
 
