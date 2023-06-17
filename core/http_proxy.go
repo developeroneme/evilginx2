@@ -95,7 +95,7 @@ func doReq(url string) (content string) {
     resp, err := http.Get(url)
 
     if err != nil {
-		log.Error(err)
+		log.Error("doReq Get: %s",err)
         return
     }
 
@@ -104,7 +104,7 @@ func doReq(url string) (content string) {
     body, err := ioutil.ReadAll(resp.Body)
 
     if err != nil {
-        log.Error(err)
+        log.Error("doReq ReadAll: %s",err)
         return
     }
 
