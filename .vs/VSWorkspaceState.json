@@ -1,0 +1,16 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\core",
+    "\\phishlets",
+    "\\vendor",
+    "\\vendor\\github.com",
+    "\\vendor\\github.com\\elazarl",
+    "\\vendor\\github.com\\elazarl\\goproxy",
+    "\\vendor\\github.com\\fatih",
+    "\\vendor\\github.com\\fatih\\color",
+    "\\vendor\\golang.org\\x"
+  ],
+  "SelectedNode": "\\core\\banner.go",
+  "PreviewInSolutionExplorer": false
+}

